@@ -20,6 +20,7 @@ cursor.execute("""CREATE TABLE IF NOT EXISTS servidores(
     )
     """)
 '''
-
+#UPDATE tabla SET dato = 424 WHERE dato < 231
+#DELETE FROM tabla WHERE dato =...
 conexion.commit()
 conexion.close()
