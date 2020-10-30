@@ -1,4 +1,5 @@
 import sqlite3
+import datetime
 
 class BaseDeDatos():
 
@@ -6,18 +7,14 @@ class BaseDeDatos():
             self.conexion = sqlite3.connect("base_de_datos.db")
             self.cursor = self.conexion.cursor()
 
-    def comprobar_existencia(self, usuario):
-        #Si el usuario existe, devuelve su ID, sinó, devuelve -1
-        self.cursor.execute("SELECT usuario FROM usuarios")
-        lista = self.cursor.fetchall()
-        i = 0
-        presente = False
-        while i <len(lista) and presente == False:
-            if lista[i][0] == usuario:
-                presente = True
-            i += 1
-        self.conexion.commit()
-        return i if presente == True else -1
     
-uwu = BaseDeDatos()
-print(uwu.comprobar_existencia('Gazuto Orsego#7386'))
+    def comprobar_existencia(self,usuario):
+        self.cursor.execute("SELECT id FROM usuarios WHERE usuario = ?", (usuario,))
+        id = self.cursor.fetchone()[0]
+        return id
+    
+    def registro(self, usuario):
+        datos = (None, usuario, 0, f"{datetime.datetime.year}-{datetime.datetime.month}-{datetime.datetime.day}")
+        self.cursor.execute('INSERT INTO usuarios VALUES(?,?,?,?);', datos)
+        self.conexion.commit()
+        return 0
