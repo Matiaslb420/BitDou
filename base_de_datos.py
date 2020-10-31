@@ -20,11 +20,11 @@ class BaseDeDatos():
         return None
     
     def retornar_fondo(self, user):
-        self.cursor.execute(f"SELECT cantidad FROM usuarios WHERE usuario = {user}")
+        self.cursor.execute(f"SELECT cantidad FROM usuarios WHERE usuario = '{user}'")
         return self.cursor.fetchone()[0]
     
     def transaccion(self, donante, cantidad, dinero_total, destinatario):
-        self.cursor.execute(f"UPDATE usuarios SET cantidad = {dinero_total} WHERE usuario = ?", donante)
+        self.cursor.execute(f"UPDATE usuarios SET cantidad = {dinero_total} WHERE usuario = ?", (donante,))
         self.conexion.commit()
         self.cursor.execute("SELECT cantidad FROM usuarios WHERE usuario = ?", (destinatario,))
         dinero = self.cursor.fetchone()[0] + cantidad

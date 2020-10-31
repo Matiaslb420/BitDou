@@ -8,6 +8,9 @@ async def on_message(message):
     if message.author == client.user or message.guild.name !='Voluntry':
         return
     if message.content.startswith('$'):
+        if message.content.startswith('$saldo'):
+            if realizar.comprobar_existencia(str(message.author)):
+                await message.channel.send("Saldo: {}".format(realizar.retornar_fondo(str(message.author))))
         #Registrarse ↓↓↓↓
         if message.content.startswith('$registro'):
             if not realizar.comprobar_existencia(str(message.author)):
@@ -16,21 +19,28 @@ async def on_message(message):
             else:
                 await message.channel.send("Ya estabas registrado gordo tetón")
         #Transacción ↓↓↓↓
-        elif message.conent.startswith('$dar'):
+        elif message.content.startswith('$dar'):
             mensaje = message.content.split()
             try:
                 destinado = ' '.join(mensaje[2:])
-                cantidad = mensaje[1]
+                cantidad = int(mensaje[1])
             except IndexError:
                 await message.channel.send("Hay algo mal escrito o me programaron mal :pleading_face:")
             else:
                 #comprueba que existan tanto el que da como el que recibe
-                if all(len(mensaje) > 2, realizar.comprobar_existencia(str(message.author)), realizar.comprobar_existencia(destinado)):
+                if all([len(mensaje) > 2, realizar.comprobar_existencia(str(message.author)), realizar.comprobar_existencia(destinado)]):
                     fondo = realizar.retornar_fondo(str(message.author))
-                    if cantidad >= fondo:
+                    if cantidad <= fondo:
                         dinero_actual = fondo - cantidad
                         #entrega autor, cantidad que entrega, dinero con el que queda y aquel que recibe
                         realizar.transaccion(str(message.author), cantidad, dinero_actual, destinado)
+                        await message.channel.send("Transaccion realizada con exito, tal vez")
+                    else:
+                        print("cantidad < fondo")
+                else:
+                    print("all, mal")
+        elif message.content.startswith("$apagar"):
+            return
                 
                 
                 
