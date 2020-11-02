@@ -7,7 +7,7 @@ class BaseDeDatos():
             self.conexion = sqlite3.connect("base_de_datos.db")
             self.cursor = self.conexion.cursor()
 
-    
+    #comprueba si alguien está ya registrado
     def comprobar_existencia(self,usuario):
         self.cursor.execute("SELECT id FROM usuarios WHERE usuario = ?", (usuario,))
         id = self.cursor.fetchone()[0]
