@@ -30,5 +30,17 @@ class BaseDeDatos():
         dinero = self.cursor.fetchone()[0] + cantidad
         self.cursor.execute(f"UPDATE usuarios SET cantidad = {dinero} WHERE usuario = ?", (destinatario,))
         self.conexion.commit()
-        return None
+    
+    def bono_diario(self, user):
+        cantidad_disponible = tuple(self.cursor.execute("SELECT cantidad FROM usuarios WHERE usuario = 'Banco'"))[0][0]
+        fecha_actual= f"{datetime.datetime.now().year}-{datetime.datetime.now().month}-{datetime.datetime.now().day}"
+        if cantidad_disponible > 0 and fecha_actual != tuple(self.cursor.execute(f"SELECT ultima_paga FROM usuarios WHERE usuario = '{user}'"))[0][0]:
+            self.cursor.execute(f"UPDATE usuarios SET ultima_paga = ? WHERE usuario = ?",(fecha_actual, user))
+            self.cursor.execute(f"UPDATE usuarios SET cantidad = cantidad+1 WHERE usuario = ?",(user,))
+            self.cursor.execute(f"UPDATE usuarios SET cantidad = cantidad-1 WHERE id = 7")
+            self.conexion.commit()
+            salida = 'Se le ha entregado un BitDou'
+        else:
+            salida = "Wait, that's illegal"
+        return salida
         

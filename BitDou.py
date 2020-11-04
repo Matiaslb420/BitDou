@@ -40,9 +40,15 @@ async def on_message(message):
                         realizar.transaccion(str(message.author), cantidad, dinero_actual, destinado)
                         await message.channel.send("Transaccion realizada con éxito")
                     else:
-                        print("cantidad < fondo")
+                        await message.channel.send("No hay suficientes bitdous")
                 else:
-                    print("all, mal")
+                    await message.channel.send("Algo salió mal")
+        elif message.content.startswith('$rec'):
+            if realizar.comprobar_existencia(str(message.author)):
+                salida = realizar.bono_diario(str(message.author))
+                await message.channel.send(salida)
+            else:
+                await message.channel.send("Usted no está registrado. Puede hacerlo con $registro")
          
                 
 client.run('Token goes here')

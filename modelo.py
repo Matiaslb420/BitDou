@@ -20,7 +20,6 @@ cursor.execute("""CREATE TABLE IF NOT EXISTS servidores(
     )
     """)
 '''
-#UPDATE tabla SET dato = 424 WHERE dato < 231
-#DELETE FROM tabla WHERE dato =...
+#cursor.execute("ALTER TABLE usuarios ADD ultima_paga date")
 conexion.commit()
 conexion.close()
